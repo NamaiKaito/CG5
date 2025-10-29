@@ -1,4 +1,4 @@
-Shader "Unlit/03_Specular"
+Shader "Unlit/04_Phong"
 {
     Properties
 	{
@@ -41,13 +41,21 @@ Shader "Unlit/03_Specular"
 
 			fixed4 frag(v2f i) : SV_Target
 			{
+				fixed4 ambient = _Color * 0.3 * _LightColor0;
+				
+				float intensity=
+				saturate(dot(normalize(i.normal),_WorldSpaceLightPos0));
+
+				fixed4 color =_Color;
+				fixed4 diffuse =color*intensity*_LightColor0;
+
 				float3 eyeDir = normalize(_WorldSpaceCameraPos.xyz-i.worldPosition);
 				float3 lightDir = normalize(_WorldSpaceLightPos0);
 				float3 normal = normalize(i.normal);
 				float3 reflectDir = -lightDir+2*i.normal*dot(i.normal,lightDir);
-				fixed4 specular = pow(saturate(dot(reflectDir,eyeDir)),20)*_LightColor0*_Color;
+				fixed4 specular = pow(saturate(dot(reflectDir,eyeDir)),20)*_LightColor0;
 
-				return specular;
+				return ambient + diffuse + specular;
 			}
 			ENDCG
 		}

@@ -10,8 +10,8 @@ Shader "Unlit/01_Simple"
 		Pass
 		{
 			CGPROGRAM
-			#pragma vertex vertex
-			#pragma fragment fragment
+			#pragma vertex vert
+			#pragma fragment frag
 			#include "UnityCG.cginc"
 
 			fixed4 _Color;
